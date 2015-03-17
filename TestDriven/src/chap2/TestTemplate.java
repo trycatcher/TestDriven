@@ -27,6 +27,18 @@ public class TestTemplate {
 		assertTemplateEvaluatesTo("1, 2, 3");
 	}
 	
+	@Test
+	public void missingValueThrowsException() throws Exception {
+		try {
+			new Template("${foo}").evaluate();
+			fail("evaulate() should throw an exception if" +
+					" a vaiable was left without a value!");
+		}
+		catch(MissingValueException expected) {
+			assertEquals("No value for ${foo}", expected.getMessage());
+		}
+	}
+	
 	private void assertTemplateEvaluatesTo(String templateText) {
 		assertEquals(templateText, template.evaluate());		
 	}

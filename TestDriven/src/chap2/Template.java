@@ -3,6 +3,8 @@ package chap2;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Template {
 	//private String variableValue;
@@ -18,13 +20,26 @@ public class Template {
 		this.variables.put(name, value);
 	}
 	
-	public String evaluate() {
-		String res = templateText;
+	public String evaluate(){
+		String res = replaceVariables();		
+		checkForMissingValues(res);
+		
+		return res;
+	}
+
+	private String replaceVariables() {
+		String result = templateText;
 		for(Entry<String, String> entry: variables.entrySet()) {
 			String regex = "\\$\\{" + entry.getKey() + "\\}";
-			String result = entry.getValue();
-			res = res.replaceAll(regex, result);
+			result = result.replaceAll(regex, entry.getValue());
 		}
-		return res;
+		return result;
+	}
+	
+	private void checkForMissingValues(String result) {
+		Matcher m = Pattern.compile(".*\\$\\{.+\\}.*").matcher(result);
+		if (m.find()) {
+			throw new MissingValueException("No value for " + m.group());
+		}
 	}
 }
