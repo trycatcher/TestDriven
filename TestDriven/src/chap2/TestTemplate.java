@@ -39,6 +39,14 @@ public class TestTemplate {
 		}
 	}
 	
+	/*@Test
+	public void variablesGetProcessedJustOnce() throws Exception {
+		template.set("one", "${one}");
+		template.set("two", "${two}");
+		template.set("three", "${three}");
+		assertTemplateEvaluatesTo("${one}, ${two}, ${three}");
+	}*/
+	
 	private void assertTemplateEvaluatesTo(String templateText) {
 		assertEquals(templateText, template.evaluate());		
 	}
